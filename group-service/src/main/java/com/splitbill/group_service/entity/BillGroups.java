@@ -3,6 +3,7 @@ package com.splitbill.group_service.entity;
 import com.splitbill.common.entity.BaseModel;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class BillGroups extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

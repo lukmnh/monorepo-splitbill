@@ -1,13 +1,13 @@
 CREATE TABLE groups.bill_groups (
-                                    id          BIGINT          PRIMARY KEY NOT NULL,
+                                    id          BIGSERIAL       PRIMARY KEY,
                                     name        VARCHAR(100)    NOT NULL,
                                     description VARCHAR(255),
                                     created_at  TIMESTAMP       NOT NULL DEFAULT NOW(),
-                                    updated_at  TIMESTAMP       NOT NULL
+                                    updated_at  TIMESTAMP
 );
 
 CREATE TABLE groups.participants (
-                                     id          BIGINT          PRIMARY KEY NOT NULL,
+                                     id          BIGSERIAL       PRIMARY KEY,
                                      group_id    BIGINT          NOT NULL,
                                      name        VARCHAR(100)    NOT NULL,
                                      email       VARCHAR(150)    NOT NULL,

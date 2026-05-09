@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 @Getter
 public enum ErrorCode {
-    GROUP_NOT_FOUND("GRP_001", "Group not found", HttpStatus.NOT_FOUND),
-    DUPLICATE_PARTICIPANT("GRP_002", "Participant already exists in this group", HttpStatus.CONFLICT);
+    GROUP_NOT_FOUND("GRP_404", "Group not found", HttpStatus.NOT_FOUND),
+    DUPLICATE_PARTICIPANT("GRP_409", "Participant already exists in this group", HttpStatus.CONFLICT),
+    PARTICIPANT_NOT_FOUND("PRT_404", "Participant not found in this group", HttpStatus.NOT_FOUND),;
     private final String code;
     private final String message;
     private final HttpStatus httpStatus;
