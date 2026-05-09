@@ -19,3 +19,4 @@ CREATE TABLE groups.participants (
 CREATE INDEX IF NOT EXISTS idx_participants_group_id ON groups.participants(group_id);
 CREATE INDEX IF NOT EXISTS idx_participants_email     ON groups.participants(email);
 CREATE INDEX IF NOT EXISTS idx_bill_groups_name       ON groups.bill_groups(name);
+CREATE INDEX IF NOT EXISTS idx_bill_groups_desc       ON groups.bill_groups(description);

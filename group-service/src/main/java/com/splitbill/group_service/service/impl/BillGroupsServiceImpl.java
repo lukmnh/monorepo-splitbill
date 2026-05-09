@@ -1,8 +1,10 @@
 package com.splitbill.group_service.service.impl;
 
+import com.splitbill.common.constant.ErrorCode;
 import com.splitbill.common.dto.request.CreateSplitGroupsRequest;
 import com.splitbill.common.dto.response.ParticipantResponse;
 import com.splitbill.common.dto.response.SplitGroupsResponse;
+import com.splitbill.common.exception.BusinessException;
 import com.splitbill.group_service.entity.BillGroups;
 import com.splitbill.group_service.entity.Participant;
 import com.splitbill.group_service.repository.BillGroupsRepository;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,23 +31,58 @@ public class BillGroupsServiceImpl implements BillGroupsService {
         BillGroups group = BillGroups.builder()
                 .name(request.getName())
                 .description(request.getDescription())
+                .participants(new ArrayList<>())
                 .build();
 
-        BillGroups savedGroup = billGroupsRepository.save(group);
-
-        List<Participant> participants = request.getParticipants().stream()
-                .map(dto -> Participant.builder()
+        if (request.getParticipants() != null) {
+            request.getParticipants().forEach(dto -> {
+                Participant p = Participant.builder()
                         .name(dto.getName())
                         .email(dto.getEmail())
                         .joinedAt(LocalDateTime.now())
-                        .group(savedGroup)
-                        .build())
+                        .group(group)
+                        .build();
+                group.getParticipants().add(p);
+            });
+        }
+        BillGroups savedGroup = billGroupsRepository.save(group);
+
+        return groupResponse(savedGroup);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SplitGroupsResponse> fetchAllGroups(String search) {
+        List<BillGroups> groups;
+
+        if (search != null && !search.isBlank()) {
+            groups = billGroupsRepository.searchGroups(search);
+        } else {
+            groups = billGroupsRepository.findAll();
+        }
+
+        return groups.stream()
+                .map(this::groupResponse)
                 .collect(Collectors.toList());
+    }
 
-        participantRepository.saveAll(participants);
-        savedGroup.setParticipants(participants);
+    @Override
+    public SplitGroupsResponse detailGroup(Long id) {
+        BillGroups groups = billGroupsRepository.findById(id).orElseThrow(() ->
+                new BusinessException(ErrorCode.GROUP_NOT_FOUND.getCode(),
+                        ErrorCode.GROUP_NOT_FOUND.getMessage(),
+                        ErrorCode.GROUP_NOT_FOUND.getHttpStatus()));
 
-        return toResponse(savedGroup);
+        return toResponse(groups);
+    }
+
+    private SplitGroupsResponse groupResponse(BillGroups groups){
+        return SplitGroupsResponse.builder()
+                .name(groups.getName())
+                .description(groups.getDescription())
+                .participantCount(groups.getParticipants() != null ? groups.getParticipants().size() : 0)
+                .createdAt(groups.getCreatedAt())
+                .build();
     }
 
     private SplitGroupsResponse toResponse(BillGroups group) {
