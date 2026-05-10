@@ -1,10 +1,11 @@
 package com.splitbill.group_service.controller;
 
-import com.splitbill.common.dto.request.CreateSplitGroupsRequest;
-import com.splitbill.common.dto.response.SplitGroupsResponse;
+import com.splitbill.common.dto.billgroups.request.CreateSplitGroupsRequest;
+import com.splitbill.common.dto.billgroups.response.SplitGroupsResponse;
 import com.splitbill.group_service.service.BillGroupsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class BillGroupsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SplitGroupsResponse>> getAllGroups(
+    public ResponseEntity<Page<SplitGroupsResponse>> getAllGroups(
             @RequestParam(value = "search", required = false) String search) {
         return ResponseEntity.ok(billGroupsService.fetchAllGroups(search));
     }

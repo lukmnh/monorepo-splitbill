@@ -1,3 +1,26 @@
 spring:
   application:
     name: expense
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/splitbill
+    username: postgres
+    password: anime021
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: expenses
+    show-sql: true
+
+  sql:
+    init:
+      mode: never
+
+server:
+  port: 8082

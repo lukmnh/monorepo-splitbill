@@ -1,9 +1,9 @@
 package com.splitbill.group_service.service.impl;
 
 import com.splitbill.common.constant.ErrorCode;
-import com.splitbill.common.dto.request.CreateSplitGroupsRequest;
-import com.splitbill.common.dto.response.ParticipantResponse;
-import com.splitbill.common.dto.response.SplitGroupsResponse;
+import com.splitbill.common.dto.billgroups.request.CreateSplitGroupsRequest;
+import com.splitbill.common.dto.billgroups.response.ParticipantResponse;
+import com.splitbill.common.dto.billgroups.response.SplitGroupsResponse;
 import com.splitbill.common.exception.BusinessException;
 import com.splitbill.group_service.entity.BillGroups;
 import com.splitbill.group_service.entity.Participant;
@@ -11,6 +11,10 @@ import com.splitbill.group_service.repository.BillGroupsRepository;
 import com.splitbill.group_service.repository.ParticipantRepository;
 import com.splitbill.group_service.service.BillGroupsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,18 +56,17 @@ public class BillGroupsServiceImpl implements BillGroupsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SplitGroupsResponse> fetchAllGroups(String search) {
-        List<BillGroups> groups;
+    public Page<SplitGroupsResponse> fetchAllGroups(String search) {
+        Page<BillGroups> groups;
+        Pageable pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         if (search != null && !search.isBlank()) {
-            groups = billGroupsRepository.searchGroups(search);
+            groups = billGroupsRepository.searchGroups(search, pageable);
         } else {
-            groups = billGroupsRepository.findAll();
+            groups = billGroupsRepository.findAll(pageable);
         }
 
-        return groups.stream()
-                .map(this::groupResponse)
-                .collect(Collectors.toList());
+        return groups.map(this::groupResponse);
     }
 
     @Override

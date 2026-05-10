@@ -1,4 +1,4 @@
-package com.splitbill.common.dto.request;
+package com.splitbill.common.dto.billgroups.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
