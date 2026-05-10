@@ -57,18 +57,13 @@ public class SettlementServiceImpl implements SettlementService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<SettlementRecordResponse> fetchSettlementHistory(Long groupId) {
+    public List<SettlementRecordResponse> fetchSettlementHistory(Long groupId) {
         Pageable pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<SettlementRecords> entities = settlementRecordsRepository.findByGroupId(groupId, pageable);
 
-        return entities.map(entity -> SettlementRecordResponse.builder()
-                .id(entity.getId())
-                .groupId(entity.getGroupId())
-                .groupName(entity.getGroupName())
-                .totalExpenses(entity.getTotalExpenses())
-                .participantCount(entity.getParticipantCount())
-                .transactionCount(entity.getTransactionCount())
-                .build());
+        return entities.stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 
     @Override

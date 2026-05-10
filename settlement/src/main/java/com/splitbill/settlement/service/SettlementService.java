@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SettlementService {
    SummaryResponse calculateForGroup(Long groupId);
-    Page<SettlementRecordResponse> fetchSettlementHistory(Long groupId);
+    List<SettlementRecordResponse> fetchSettlementHistory(Long groupId);
     List<SettlementRecordResponse> fetchLatestPerGroup();
 }

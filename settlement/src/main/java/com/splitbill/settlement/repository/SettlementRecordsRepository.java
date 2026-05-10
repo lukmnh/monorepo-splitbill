@@ -15,14 +15,14 @@ public interface SettlementRecordsRepository extends JpaRepository<SettlementRec
     Page<SettlementRecords> findByGroupId(Long groupId, Pageable pageable);
     @Query(value = """
             SELECT sr.*
-            FROM settlement_records sr
+            FROM settlement.settlement_records sr
             INNER JOIN (
-                SELECT group_id, MAX(calculated_at) AS latest
-                FROM settlement_records
+                SELECT group_id, MAX(created_at) AS latest
+                FROM settlement.settlement_records
                 GROUP BY group_id
             ) latest_sr ON sr.group_id = latest_sr.group_id
-                        AND sr.calculated_at = latest_sr.latest
-            ORDER BY sr.calculated_at DESC
+                        AND sr.created_at = latest_sr.latest
+            ORDER BY sr.created_at DESC
             """, nativeQuery = true)
     List<SettlementRecords> findLatestPerGroup();
 }

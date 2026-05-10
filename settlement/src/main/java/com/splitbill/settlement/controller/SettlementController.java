@@ -25,7 +25,7 @@ public class SettlementController {
     }
 
     @GetMapping("/groups/{groupId}/history")
-    public ResponseEntity<Page<SettlementRecordResponse>> getHistory(@PathVariable Long groupId) {
+    public ResponseEntity<List<SettlementRecordResponse>> getHistory(@PathVariable Long groupId) {
         return ResponseEntity.ok(settlementService.fetchSettlementHistory(groupId));
     }
 
