@@ -2,7 +2,6 @@ package com.splitbill.common.exception;
 
 import com.splitbill.common.constant.ErrorCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter

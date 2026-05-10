@@ -11,7 +11,8 @@ public enum ErrorCode {
     DUPLICATE_PARTICIPANT("GRP_409", "Participant already exists in this group", HttpStatus.CONFLICT),
     PARTICIPANT_NOT_FOUND("PRT_404", "Participant not found in this group", HttpStatus.NOT_FOUND),
     INVALID_SPLIT_AMOUNT("EXP_400", "Exact split amounts must equal total expense", HttpStatus.BAD_REQUEST),
-    INVALID_SPLIT_DATA("EXP_400", "Invalid split data", HttpStatus.BAD_REQUEST);
+    INVALID_SPLIT_DATA("EXP_400", "Invalid split data", HttpStatus.BAD_REQUEST),
+    FAILED_TO_INSERT_DATA("SET_500", "Failed to insert data to database", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
     private final String message;

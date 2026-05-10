@@ -14,12 +14,12 @@ import java.util.Optional;
 @Repository
 public interface BillGroupsRepository extends JpaRepository<BillGroups, Long> {
     @Query(value = """
-        SELECT * FROM bill_groups b 
+        SELECT * FROM groups.bill_groups b 
         WHERE LOWER(b.name) LIKE LOWER(CONCAT('%', :search, '%')) 
            OR LOWER(b.description) LIKE LOWER(CONCAT('%', :search, '%'))
         """,
             countQuery = """
-        SELECT COUNT(*) FROM bill_groups b 
+        SELECT COUNT(*) groups.FROM bill_groups b 
         WHERE LOWER(b.name) LIKE LOWER(CONCAT('%', :search, '%')) 
            OR LOWER(b.description) LIKE LOWER(CONCAT('%', :search, '%'))
         """,
