@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,9 +71,7 @@ public class BillGroupsServiceImpl implements BillGroupsService {
     @Override
     public SplitGroupsResponse detailGroup(Long id) {
         BillGroups groups = billGroupsRepository.findById(id).orElseThrow(() ->
-                new BusinessException(ErrorCode.GROUP_NOT_FOUND.getCode(),
-                        ErrorCode.GROUP_NOT_FOUND.getMessage(),
-                        ErrorCode.GROUP_NOT_FOUND.getHttpStatus()));
+                new BusinessException(ErrorCode.GROUP_NOT_FOUND));
 
         return toResponse(groups);
     }

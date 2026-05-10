@@ -24,6 +24,15 @@ public class SplitExpenseServiceImpl implements SplitExpenseService {
     }
 
     private List<ExpenseSplits> calculateEqualSplits(BigDecimal total, List<CreateSplitRequest> requests) {
+        long uniqueCount = requests.stream()
+                .map(CreateSplitRequest::getParticipantId)
+                .distinct()
+                .count();
+
+        if (uniqueCount != requests.size()) {
+            throw new BusinessException(ErrorCode.INVALID_SPLIT_DATA,
+                    "Duplicate participant in split");
+        }
         int count = requests.size();
         BigDecimal equalShare = total.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP);
         BigDecimal lastShare = total.subtract(equalShare.multiply(BigDecimal.valueOf(count - 1)));
@@ -56,10 +65,9 @@ public class SplitExpenseServiceImpl implements SplitExpenseService {
 
         if (sum.compareTo(total) != 0) {
             throw new BusinessException(
-                    ErrorCode.INVALID_SPLIT_AMOUNT.getCode(),
+                    ErrorCode.INVALID_SPLIT_AMOUNT,
                     ErrorCode.INVALID_SPLIT_AMOUNT.getMessage() +
-                            String.format(" (Expected: %.2f, Actual: %.2f)", total, sum),
-                    ErrorCode.INVALID_SPLIT_AMOUNT.getHttpStatus()
+                            String.format(" (Inputted: %.2f, Expected: %.2f)", total, sum)
             );
         }
 

@@ -11,10 +11,17 @@ public class BusinessException extends RuntimeException {
     private final String code;
     private final HttpStatus httpStatus;
 
-    public BusinessException(String code, String message, HttpStatus httpStatus) {
-        super(message);
-        this.code = code;
-        this.httpStatus = httpStatus;
-        this.errorCode = null;
+    public BusinessException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+        this.code = errorCode.getCode();
+        this.httpStatus = errorCode.getHttpStatus();
+    }
+
+    public BusinessException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
+        this.errorCode = errorCode;
+        this.code = errorCode.getCode();
+        this.httpStatus = errorCode.getHttpStatus();
     }
 }

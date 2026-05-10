@@ -11,15 +11,18 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> BusinessException(BusinessException ex) {
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
         ErrorCode errorCode = ex.getErrorCode();
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getCode(),
+                ex.getMessage(),
+                errorCode.getHttpStatus().value()
+        );
+
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
-                .body(new ErrorResponse(
-                        errorCode.getCode(),
-                        ex.getMessage(),
-                        errorCode.getHttpStatus().value()
-                ));
+                .body(errorResponse);
     }
 
     @Getter

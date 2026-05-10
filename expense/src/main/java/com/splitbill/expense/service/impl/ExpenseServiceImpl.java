@@ -1,5 +1,6 @@
 package com.splitbill.expense.service.impl;
 
+import com.splitbill.common.constant.ExpensesType;
 import com.splitbill.common.dto.expenses.request.CreateExpenseRequest;
 import com.splitbill.common.dto.expenses.response.ExpenseResponse;
 import com.splitbill.common.dto.expenses.response.SplitResponse;
@@ -9,6 +10,10 @@ import com.splitbill.expense.repository.ExpensesRepository;
 import com.splitbill.expense.service.ExpenseService;
 import com.splitbill.expense.service.SplitExpenseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +56,25 @@ public class ExpenseServiceImpl implements ExpenseService {
         Expenses savedExpense = expensesRepository.save(expense);
 
         return toResponse(savedExpense);
+    }
+
+    @Override
+    public Page<ExpenseResponse> fetchExpensesByGroup(Long groupId, String category) {
+        Page<Expenses> expensesPage;
+        Pageable pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        if (category != null && !category.isBlank()) {
+            ExpensesType cat = ExpensesType.valueOf(category.toUpperCase());
+            expensesPage = expensesRepository.findByGroupIdAndCategory(groupId, cat, pageable);
+        } else {
+            expensesPage = expensesRepository.findByGroupIdOrderByExpenseDateDesc(groupId, pageable);
+        }
+        return expensesPage.map(this::toResponse);
+    }
+
+    @Override
+    public ExpenseResponse detailExpense(Long expenseId) {
+        return null;
     }
 
     private ExpenseResponse toResponse(Expenses expense) {
