@@ -27,6 +27,7 @@
     <module>common</module>
     <module>group-service</module>
     <module>expense</module>
+    <module>settlement</module>
   </modules>
 
   <properties>
