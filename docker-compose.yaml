@@ -21,7 +21,7 @@ services:
   group-service:
     build:
       context: .
-      dockerfile: group-service/Dockerfile
+      dockerfile: group-service/DockerFile
     container_name: splitbill-group-service
     restart: unless-stopped
     ports:
@@ -43,7 +43,7 @@ services:
   expense:
     build:
       context: .
-      dockerfile: expense/Dockerfile
+      dockerfile: expense/DockerFile
     container_name: splitbill-expense
     restart: unless-stopped
     ports:
@@ -65,7 +65,7 @@ services:
   settlement:
     build:
       context: .
-      dockerfile: settlement/Dockerfile
+      dockerfile: settlement/DockerFile
     container_name: splitbill-settlement
     restart: unless-stopped
     ports:
