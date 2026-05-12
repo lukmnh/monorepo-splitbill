@@ -1,0 +1,33 @@
+# ── Stage 1: Build ──────────────────────────────────────────────────────────
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
+
+WORKDIR /workspace
+
+COPY pom.xml ./
+COPY common/pom.xml common/
+COPY group-service/pom.xml group-service/
+COPY expense/pom.xml expense/
+COPY settlement/pom.xml settlement/
+
+RUN mvn dependency:go-offline -pl common,group-service -am -q
+
+# Copy source
+COPY common/src common/src
+COPY group-service/src group-service/src
+
+# Build only common + group-service, skip tests
+RUN mvn clean package -pl common,group-service -am -DskipTests -q
+
+# ── Stage 2: Runtime ─────────────────────────────────────────────────────────
+FROM eclipse-temurin:21-jre-alpine
+
+WORKDIR /app
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+COPY --from=builder /workspace/group-service/target/*.jar app.jar
+
+EXPOSE 8081
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
