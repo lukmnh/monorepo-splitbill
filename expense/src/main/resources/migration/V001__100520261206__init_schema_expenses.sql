@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS expenses (
+CREATE TABLE IF NOT EXISTS expenses.expenses (
                                         id                      BIGSERIAL PRIMARY KEY,
                                         group_id                BIGINT          NOT NULL,
                                         title                   VARCHAR(150)    NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     updated_at              TIMESTAMP       DEFAULT NOW()
     );
 
-CREATE TABLE IF NOT EXISTS expense_splits (
+CREATE TABLE IF NOT EXISTS expenses.expense_splits (
                                               id                  BIGSERIAL PRIMARY KEY,
 
                                               expense_id          BIGINT          NOT NULL,
@@ -43,19 +43,19 @@ CREATE TABLE IF NOT EXISTS expense_splits (
 
 
 CREATE INDEX IF NOT EXISTS idx_expenses_group_id
-    ON expenses(group_id);
+    ON expenses.expenses(group_id);
 
 CREATE INDEX IF NOT EXISTS idx_expenses_paid_by
-    ON expenses(paid_by_participant_id);
+    ON expenses.expenses(paid_by_participant_id);
 
 CREATE INDEX IF NOT EXISTS idx_expenses_category
-    ON expenses(category);
+    ON expenses.expenses(category);
 
 CREATE INDEX IF NOT EXISTS idx_expenses_date
-    ON expenses(expense_date);
+    ON expenses.expenses(expense_date);
 
 CREATE INDEX IF NOT EXISTS idx_splits_expense_id
-    ON expense_splits(expense_id);
+    ON expenses.expense_splits(expense_id);
 
 CREATE INDEX IF NOT EXISTS idx_splits_participant_id
-    ON expense_splits(participant_id);
+    ON expenses.expense_splits(participant_id);

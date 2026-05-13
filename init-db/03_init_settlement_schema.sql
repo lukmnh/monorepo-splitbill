@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS settlement;
+
 CREATE TABLE IF NOT EXISTS settlement.settlement_records (
                                                              id                  BIGSERIAL PRIMARY KEY,
                                                              group_id            BIGINT          NOT NULL,

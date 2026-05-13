@@ -69,7 +69,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.splitbill.group.GroupServiceApplication</mainClass>
+					<mainClass>com.splitbill.group_service.GroupServiceApplication</mainClass>
 				</configuration>
 			</plugin>
 			<plugin>
